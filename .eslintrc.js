@@ -4,5 +4,6 @@ module.exports = {
   rules: {
     'react/jsx-filename-extension': 0,
     'no-use-before-define': 0,
+    'import/newline-after-import': 'off',
   },
 };

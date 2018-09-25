@@ -1,26 +1,27 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const { Schema } = mongoose;
+// const Schema = mongoose.Schema; //ESLint Destructuring Required
 
-//CREATE SCHEMA
+// CREATE SCHEMA
 const UserSchema = new Schema({
   googleID: {
     type: String,
-    required: true
+    required: true,
   },
   email: {
     type: String,
-    required: true
+    required: true,
   },
   firstName: {
-    type: String
+    type: String,
   },
   lastName: {
-    type: String
+    type: String,
   },
   image: {
-    type: String
-  }
+    type: String,
+  },
 });
 
-//CREATE COLLECTION & ADD SCHEMA
+// CREATE COLLECTION & ADD SCHEMA
 mongoose.model('users', UserSchema);

@@ -5,6 +5,10 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const exphandlebars = require('express-handlebars');
 
+// GETTING NODE SASS MIDDLEWARE
+const sassMiddleware = require('node-sass-middleware');
+const path = require('path');
+
 // LOAD USER MODEL
 require('./models/User');
 
@@ -12,10 +16,12 @@ require('./models/User');
 require('./config/passport')(passport);
 
 // LOAD ROUTES
-const home = require('./routes/home');
+const home = require('./routes/index');
 const auth = require('./routes/auth');
-const verify = require('./routes/auth');
-const logout = require('./routes/auth');
+const stories = require('./routes/stories');
+// const about = require('./routes/auth');
+// const verify = require('./routes/auth');
+// const logout = require('./routes/auth');
 
 // LOAD KEYS
 const keys = require('./config/keys');
@@ -39,6 +45,18 @@ mongoose
 
 // APP INIT
 const app = express();
+
+// USING SASS MIDDLEWARE
+app.use(
+  sassMiddleware({
+    src: path.join(__dirname, '/_scss'),
+    dest: path.join(__dirname, '/_public'),
+    debug: false,
+  }),
+);
+
+// STATIC PUBLIC FOLDER
+app.use(express.static(path.join(__dirname, '_public')));
 
 // HANDLEBAR MIDDLEWARE
 app.engine(
@@ -74,9 +92,11 @@ app.use((req, res, next) => {
 
 // USE ROUTES
 app.use('/', home);
+app.use('/about', home);
 app.use('/auth', auth);
-app.use('/auth/verify', verify);
-app.use('/auth/logout', logout);
+app.use('/stories', stories);
+// app.use('/auth/verify', auth);
+// app.use('/auth/logout', auth);
 
 const port = process.env.PORT || 5000;
 
