@@ -3,69 +3,77 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
+const exphandlebars = require('express-handlebars');
 
-//LOAD USER MODEL
+// LOAD USER MODEL
 require('./models/User');
 
-//PASSPORT CONFIG
+// PASSPORT CONFIG
 require('./config/passport')(passport);
 
-//LOAD ROUTES
+// LOAD ROUTES
+const home = require('./routes/home');
 const auth = require('./routes/auth');
 const verify = require('./routes/auth');
 const logout = require('./routes/auth');
 
-//LOAD KEYS
+// LOAD KEYS
 const keys = require('./config/keys');
 
-//GETS RID OF DEPRICATION WARNINGS
+// GETS RID OF DEPRICATION WARNINGS
 mongoose.Promise = global.Promise;
 
-//DB CONFIG
+// DB CONFIG
 // const db = require('./config/database');
 
-//CONNECTING TO MONGO DB WITH MONGOOSE
+// CONNECTING TO MONGO DB WITH MONGOOSE
 mongoose
   .connect(
     keys.mongoURI,
     {
-      useNewUrlParser: true
-    }
+      useNewUrlParser: true,
+    },
   )
   .then(() => console.log('Connected to MongoDB ...'))
-  .catch(err => console.error('Could not connect to MongoDB ...'));
+  .catch(err => console.error(`Could not connect to MongoDB: ${err}`));
 
-//APP INIT
+// APP INIT
 const app = express();
 
-app.get('/', (req, res) => {
-  res.send('It Works!');
-});
+// HANDLEBAR MIDDLEWARE
+app.engine(
+  'handlebars',
+  exphandlebars({
+    defaultLayout: 'main',
+  }),
+);
+app.set('view engine', 'handlebars');
 
-//COOKIE PARSER
+// COOKIE PARSER
 app.use(cookieParser());
 
-//SESSION MIDDLEWARE
+// SESSION MIDDLEWARE
 app.use(
   session({
     secret: 'secret',
     resave: true,
-    saveUninitialized: true
+    saveUninitialized: true,
     // cookie: { maxAge: 60000 }
-  })
+  }),
 );
 
-//PASSPORT MIDDLEWARE
+// PASSPORT MIDDLEWARE
 app.use(passport.initialize());
 app.use(passport.session());
 
-//GLOBAL VARS
+// GLOBAL VARS
 app.use((req, res, next) => {
   res.locals.user = req.user || null;
   next();
 });
 
-//USE ROUTES
+// USE ROUTES
+app.use('/', home);
 app.use('/auth', auth);
 app.use('/auth/verify', verify);
 app.use('/auth/logout', logout);
