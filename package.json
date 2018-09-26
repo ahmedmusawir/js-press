@@ -1,10 +1,10 @@
 {
   "name": "js-press",
   "version": "1.0.0",
-  "description": "A Mini WordPress with JS",
+  "description": "A Mini Social Network with JS",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node app.js"
   },
   "repository": "https://github.com/ahmedmusawir/js-press.git",
   "author": "The Moose",

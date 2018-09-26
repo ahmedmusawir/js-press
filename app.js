@@ -9,19 +9,17 @@ const exphandlebars = require('express-handlebars');
 const sassMiddleware = require('node-sass-middleware');
 const path = require('path');
 
-// LOAD USER MODEL
+// LOAD MODELS
 require('./models/User');
+require('./models/Story');
 
 // PASSPORT CONFIG
 require('./config/passport')(passport);
 
 // LOAD ROUTES
-const home = require('./routes/index');
+const home = require('./routes');
 const auth = require('./routes/auth');
 const stories = require('./routes/stories');
-// const about = require('./routes/auth');
-// const verify = require('./routes/auth');
-// const logout = require('./routes/auth');
 
 // LOAD KEYS
 const keys = require('./config/keys');
@@ -54,6 +52,10 @@ app.use(
     debug: false,
   }),
 );
+
+// BODY PARSER REPLACEMENT IN EXPRESS 4+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // STATIC PUBLIC FOLDER
 app.use(express.static(path.join(__dirname, '_public')));
