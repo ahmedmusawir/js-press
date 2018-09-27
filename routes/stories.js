@@ -16,14 +16,12 @@ router.get('/', (req, res) => {
     });
 });
 // STORIES ADD FORM
-// router.get('/add', ensureAuthenticated, (req, res) => {
-//   res.render('stories/add');
-// });
-router.get('/add', (req, res) => {
+router.get('/add', ensureAuthenticated, (req, res) => {
   res.render('stories/add');
 });
+
 // POST STORY
-router.post('/', (req, res) => {
+router.post('/', ensureAuthenticated, (req, res) => {
   let allowComments;
 
   if (req.body.allowComments) {
@@ -45,12 +43,55 @@ router.post('/', (req, res) => {
   });
 });
 // STORIES EDIT FORM
-router.get('/edit', ensureAuthenticated, (req, res) => {
-  res.render('stories/edit');
+router.get('/edit/:id', ensureAuthenticated, (req, res) => {
+  Story.findOne({
+    _id: req.params.id,
+  }).then((story) => {
+    res.render('stories/edit', {
+      story,
+    });
+  });
+});
+// EDIT PUT REQUEST
+router.put('/:id', (req, res) => {
+  Story.findOne({
+    _id: req.params.id,
+  }).then((story) => {
+    let allowComments;
+
+    if (req.body.allowComments) {
+      allowComments = true;
+    } else {
+      allowComments = false;
+    }
+
+    // New values
+    story.title = req.body.title;
+    story.body = req.body.body;
+    story.status = req.body.status;
+    story.allowComments = allowComments;
+
+    story.save().then((story) => {
+      res.redirect('/dashboard');
+    });
+  });
 });
 // STORIES SHOW LIST
-router.get('/show', ensureAuthenticated, (req, res) => {
-  res.render('stories/show');
+router.get('/show/:id', (req, res) => {
+  Story.findOne({
+    _id: req.params.id,
+  })
+    .populate('user')
+    .then((story) => {
+      res.render('stories/show', {
+        story,
+      });
+    });
 });
-
+// DELETE STORY
+router.delete('/:id', (req, res) => {
+  Story.deleteOne({ _id: req.params.id }).then(() => {
+    res.redirect('/dashboard');
+  });
+});
 module.exports = router;

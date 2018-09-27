@@ -4,6 +4,7 @@ const passport = require('passport');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const exphandlebars = require('express-handlebars');
+const methodOverride = require('method-override');
 
 // GETTING NODE SASS MIDDLEWARE
 const sassMiddleware = require('node-sass-middleware');
@@ -23,6 +24,11 @@ const stories = require('./routes/stories');
 
 // LOAD KEYS
 const keys = require('./config/keys');
+
+// HANDLEBAR HELPERS
+const {
+  truncate, stripTags, formatDate, select,
+} = require('./helpers/handlebars_helper');
 
 // GETS RID OF DEPRICATION WARNINGS
 mongoose.Promise = global.Promise;
@@ -57,6 +63,9 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// METHOD OVERRIDE MIDDLEWARE
+app.use(methodOverride('_method'));
+
 // STATIC PUBLIC FOLDER
 app.use(express.static(path.join(__dirname, '_public')));
 
@@ -64,6 +73,12 @@ app.use(express.static(path.join(__dirname, '_public')));
 app.engine(
   'handlebars',
   exphandlebars({
+    helpers: {
+      truncate,
+      stripTags,
+      formatDate,
+      select,
+    },
     defaultLayout: 'main',
   }),
 );

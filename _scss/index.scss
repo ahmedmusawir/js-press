@@ -13,8 +13,16 @@ main {
   flex: 1 0 auto;
 }
 
-textarea {
-  // height: 12rem;
+.story-text {
+  height: 100px;
+}
+
+.dash-status {
+  text-transform: capitalize;
+}
+
+#delete-form {
+  display: inline;
 }
 
 .nav-wrapper {
