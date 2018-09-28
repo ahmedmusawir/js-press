@@ -13,8 +13,20 @@ main {
   flex: 1 0 auto;
 }
 
-.story-text {
-  height: 100px;
+.card {
+  .card-content {
+    .story-title {
+      min-height: 70px;
+    }
+    .story-time {
+      padding: 0.5rem;
+      background-color: lighten($color: #e3e3e3, $amount: 7%);
+      border-radius: 20px;
+    }
+    .story-text {
+      height: 100px;
+    }
+  }
 }
 
 .dash-status {

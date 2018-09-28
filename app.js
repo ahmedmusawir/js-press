@@ -27,7 +27,11 @@ const keys = require('./config/keys');
 
 // HANDLEBAR HELPERS
 const {
-  truncate, stripTags, formatDate, select,
+  truncate,
+  stripTags,
+  formatDate,
+  select,
+  editIcon,
 } = require('./helpers/handlebars_helper');
 
 // GETS RID OF DEPRICATION WARNINGS
@@ -78,6 +82,7 @@ app.engine(
       stripTags,
       formatDate,
       select,
+      editIcon,
     },
     defaultLayout: 'main',
   }),

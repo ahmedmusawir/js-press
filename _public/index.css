@@ -9,7 +9,15 @@ header {
 main {
   flex: 1 0 auto; }
 
-.story-text {
+.card .card-content .story-title {
+  min-height: 70px; }
+
+.card .card-content .story-time {
+  padding: 0.5rem;
+  background-color: whitesmoke;
+  border-radius: 20px; }
+
+.card .card-content .story-text {
   height: 100px; }
 
 .dash-status {
